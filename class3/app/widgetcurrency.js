@@ -19,6 +19,6 @@ WidgetCurrency.prototype.convert = function(toBase, exchangeRates) {
 
 WidgetCurrency.prototype.callApi = function(callback) {
 	setTimeout(function(){
-		callback("hello world " + message);	
+		callback("hello world");	
 	}, 2000);
 };
