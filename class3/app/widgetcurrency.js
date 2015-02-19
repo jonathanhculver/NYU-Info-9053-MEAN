@@ -1,6 +1,4 @@
-var widgetCurrency = function(){
-	var self = {};
-	self.base = "foo";
-
-	return self;
+var WidgetCurrency = function(){
+	this.base = "foo";
+	this.amount = 0;
 };
