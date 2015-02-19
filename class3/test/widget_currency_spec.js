@@ -40,3 +40,24 @@ describe("display", function() {
 	});
 });
 
+describe("convert", function() {
+	var currency;
+	beforeEach(function() {
+		var exchangeRates = {
+			foo: 5,
+			bar: 10,
+			buzz: 100
+		};
+		currency = new WidgetCurrency("foo", 20);
+		currency.convert("bar", exchangeRates);
+	});
+	describe("converting 20 foo to bar", function() {
+		it("base should be bar", function() {
+			expect(currency.base).toEqual("bar");
+		});
+		it("amount should be 10", function() {
+			expect(currency.amount).toEqual(10);
+		});
+	});
+});
+

@@ -9,4 +9,10 @@ var WidgetCurrency = function(base, amount){
 
 WidgetCurrency.prototype.display = function() {
 	return this.base+" : "+ this.amount;
-}
+};
+
+WidgetCurrency.prototype.convert = function(toBase, exchangeRates) {
+	var ratio = exchangeRates[this.base]/exchangeRates[toBase];
+	this.amount = this.amount * ratio;
+	this.base = toBase;
+};
