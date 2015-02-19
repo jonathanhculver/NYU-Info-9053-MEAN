@@ -16,3 +16,9 @@ WidgetCurrency.prototype.convert = function(toBase, exchangeRates) {
 	this.amount = this.amount * ratio;
 	this.base = toBase;
 };
+
+WidgetCurrency.prototype.callApi = function(callback) {
+	setTimeout(function(){
+		callback("hello world " + message);	
+	}, 2000);
+};

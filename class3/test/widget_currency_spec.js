@@ -1,4 +1,17 @@
 describe("widgetCurrency", function() {
+	describe("call api", function() {
+		var result;
+		beforeEach(function(done) {
+			var currency = new WidgetCurrency();
+			currency.callApi(function(msg) {
+				result = msg;
+				done(); //callback has finished, ok to run tests
+			});
+		});
+		it("result is hello world", function() {
+			expect(result).toEqual("hello world");
+		});
+	});
 	it("is defined", function() {
 		expect(WidgetCurrency).toBeDefined();
 	});
