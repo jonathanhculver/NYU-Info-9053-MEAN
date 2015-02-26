@@ -1,0 +1,14 @@
+{
+  "name": "class4",
+  "version": "0.0.1",
+  "description": "computes fizz buzz",
+  "main": "src/fizz_buzz.js",
+  "scripts": {
+    "test": "jasmine-node spec/fizz_buzz_spec.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jasmine-node": "^1.14.5"
+  }
+}
