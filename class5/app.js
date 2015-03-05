@@ -1,24 +1,10 @@
-var mongoose = require("mongoose");
+var db = require("./config/db");
 
-var Person = mongoose.model("Person", {
-	name: String
-});
+db.connect(function(){
+	db.seed(function(){
 
-mongoose.connect("mongodb://localhost/my_world");
-
-mongoose.connection.once("open", function(){
-	console.log('connected');
-	var people = [
-		{name: "Moe"},
-		{name: "Larry"},
-		{name: "Curly"}
-	];
-	Person.remove({}, function(){ //truncating
-		Person.create(people);
 	});
-	setTimeout(function(){
-		mongoose.disconnect(function() {
-			console.log("disconnected");
-		});
-	}, 3000);
+	setTimeout(function() {
+		db.disconnect(function(){});
+	}, 2000)
 });
