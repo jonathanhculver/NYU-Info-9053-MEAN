@@ -8,6 +8,14 @@ PersonSchema.statics.getOneByName = function(name, cb) {
 	this.findOne({name: name}, cb);
 };
 
+PersonSchema.statics.getOneById = function(id, cb) {
+	this.findOne({_id: id}, cb);
+};
+
+PersonSchema.statics.getAll = function(cb){
+	this.find({}, cb).sort("-name").exec(cb);
+};
+
 var Person = mongoose.model("Person", PersonSchema);
 
 var seed = function(cb) {
