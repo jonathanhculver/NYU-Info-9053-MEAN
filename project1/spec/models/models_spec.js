@@ -72,6 +72,8 @@ describe("models", function() {
             db.connect(function(){
                 models.seedPlaces(function(err, nyc, paris, london){
                     ids.nycId = nyc._id;
+                    ids.parisId = paris._id;
+                    ids.londonId = london._id;
                     done();
                 });
             });
@@ -116,6 +118,66 @@ describe("models", function() {
                 });
             });
             it("places are nyc, paris, london", function(){
+                expect(places).toEqual(['New York', 'Paris', 'London']);
+            });
+        });
+        describe("increase number of times favorited", function(){
+            var place;
+            beforeEach(function(done){
+                Place.increaseNumberOfTimesFavorited(ids.nycId, function(err, _place){
+                    place = _place;
+                    done();
+                });
+            });
+            it("nyc is favorited 1 time", function(){
+                expect(place.numberOfTimesFavorited).toEqual(1);
+            })
+        });
+        describe("decrease number of times favorited", function(){
+            var place;
+            beforeEach(function(done){
+                Place.decreaseNumberOfTimesFavorited(ids.nycId, function(err, _place){
+                    place = _place;
+                    done();
+                });
+            });
+            it("nyc is favorited -1 time", function(){
+                expect(place.numberOfTimesFavorited).toEqual(-1);
+            })
+        });
+        describe("getAllFavPlaces", function(){
+            var places;
+            beforeEach(function(done){
+
+                Place.increaseNumberOfTimesFavorited(ids.nycId, function(){
+                    Place.increaseNumberOfTimesFavorited(ids.parisId, function(){
+                         Place.getAllFavoritedPlaces(function(err, _places){
+                            places = _places.map(function(place){
+                                return place.name;
+                            });
+                            done();
+                        });
+                    });
+                });
+               
+            });
+            it("Favorite Places are NYC and Paris", function(){
+                expect(places).toEqual(['New York', 'Paris']);
+            });
+        });
+        describe("getAllUnFavPlaces", function(){
+            var places;
+            beforeEach(function(done){
+
+                 Place.getAllUnfavoritedPlaces(function(err, _places){
+                    places = _places.map(function(place){
+                        return place.name;
+                    });
+                    done();
+                });
+               
+            });
+            it("Unfavorite Places are NYC, Paris, London", function(){
                 expect(places).toEqual(['New York', 'Paris', 'London']);
             });
         });

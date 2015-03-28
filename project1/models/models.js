@@ -38,6 +38,26 @@ PlaceSchema.statics.getAll = function(cb) {
     this.find({}, cb);
 };
 
+PlaceSchema.statics.increaseNumberOfTimesFavorited = function(id, cb) {
+    this.findOneAndUpdate({_id: id}, {$inc: {numberOfTimesFavorited:1}}, {}, cb);
+};
+
+PlaceSchema.statics.decreaseNumberOfTimesFavorited = function(id, cb) {
+    this.findOneAndUpdate({_id: id}, {$inc: {numberOfTimesFavorited:-1}}, {}, cb);
+};
+
+PlaceSchema.statics.getAllFavoritedPlaces= function(cb) {
+    this.find({})
+        .where('numberOfTimesFavorited').gt(0)
+        .exec(cb);
+};
+
+PlaceSchema.statics.getAllUnfavoritedPlaces = function(cb) {
+    this.find({})
+        .where('numberOfTimesFavorited').lte(0)
+        .exec(cb);
+};
+
 var Place = mongoose.model("Place", PlaceSchema);
 
 /* end Place methods **/
