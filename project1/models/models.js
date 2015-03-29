@@ -1,7 +1,13 @@
 var mongoose = require("mongoose");
 
 var PersonSchema = new mongoose.Schema({
-	name: String
+	name: String,
+    favoritePlaces: [{
+        type: mongoose.Schema.ObjectId,
+        ref: "Place"
+    }],
+    numberOfFavoritePlaces: {type: Number, default: 0}
+
 });
 
 PersonSchema.statics.getOneByName = function(name, cb) {
@@ -14,6 +20,64 @@ PersonSchema.statics.getOneById = function(id, cb) {
 
 PersonSchema.statics.getAll = function(cb){
 	this.find({}, cb).sort("-name").exec(cb);
+};
+
+PersonSchema.statics.addPlace = function(personId, placeId, cb) {
+    this.getOneById(personId, function(err, _person){
+        if(_person.favoritePlaces.indexOf(placeId) != -1) {
+           return cb({
+                message: "ALREADY_FAVORITED"
+            });
+        }
+        var query = {
+            _id: personId
+        };
+        var update = {
+            $push: {
+                favoritePlaces: placeId
+            },
+            $inc: {
+                numberOfFavoritePlaces: 1
+            }
+        };
+        //add favorite place to person and increase # of fav places
+        Person.update(query, update, function(err){
+            //increased num of times place has been favorite
+            Place.increaseNumberOfTimesFavorited(placeId, cb);
+        });
+
+    });
+};
+
+PersonSchema.statics.removePlace = function(personId, placeId, cb) {
+    this.getOneById(personId, function(err, _person){
+        if(_person.favoritePlaces.indexOf(placeId) == -1) {
+           return cb({
+                message: "PLACE_NOT_FOUND"
+            });
+        }
+        var query = {
+            _id: personId
+        };
+        var update = {
+            $pull: {
+                favoritePlaces: placeId
+            },
+            $inc: {
+                numberOfFavoritePlaces: -1
+            }
+        };
+        //remove favorite place from person and decrease # of fav places
+        Person.update(query, update, function(err){
+            //decrease num of times place has been favorite
+            Place.decreaseNumberOfTimesFavorited(placeId, cb);
+        });
+
+    });
+};
+
+PersonSchema.statics.findAllWhoFavoritedPlace = function(placeId, cb) {
+    this.find({favoritePlaces: placeId}, cb);
 };
 
 var Person = mongoose.model("Person", PersonSchema);
@@ -35,7 +99,9 @@ PlaceSchema.statics.getOneById = function(id, cb) {
 };
 
 PlaceSchema.statics.getAll = function(cb) {
-    this.find({}, cb);
+    this.find({})
+        .sort("name")
+        .exec(cb);
 };
 
 PlaceSchema.statics.increaseNumberOfTimesFavorited = function(id, cb) {

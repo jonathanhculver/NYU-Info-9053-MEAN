@@ -11,7 +11,12 @@ describe("models", function() {
     			models.seedPeople(function(err, moe, larry, curly){
     				ids.moeId = moe._id;
     				ids.larryId = larry._id;
-    				done();
+	                models.seedPlaces(function(err, nyc, paris, london){
+                        ids.nycId = nyc._id;
+                        ids.parisId = paris._id;
+                        ids.londonId = london._id;
+                        done();
+                    });
     			});
     		});
     	});
@@ -20,6 +25,7 @@ describe("models", function() {
     			done();
     		});
     	});
+
     	describe("getPersonByName", function(){
     		var person;
     		beforeEach(function(done){
@@ -62,6 +68,88 @@ describe("models", function() {
     			expect(people).toEqual(['Moe', 'Larry', 'Curly']);
     		});
     	});
+
+        describe("addFavoritePlace", function(){
+            var place,
+                person,
+                error;
+            beforeEach(function(done){
+                Person.addPlace(ids.moeId, ids.parisId, function(err, _place){
+                    place = _place;
+                    Person.getOneById(ids.moeId, function(err, _person){
+                        person = _person;
+                        Person.addPlace(ids.moeId, ids.parisId, function(message){
+                            error = message;
+                            done();
+                        });
+                    });
+                });
+            });
+            it("paris is favorited 1 time", function(){
+                expect(place.numberOfTimesFavorited).toEqual(1);
+            });
+            it("moe has 1 fav place", function(){
+                expect(person.numberOfFavoritePlaces).toEqual(1);
+            });
+            it("moe's fav place is paris", function(){
+                expect(person.favoritePlaces.indexOf(ids.parisId)).not.toEqual(-1);
+            });
+            it("moe can not add paris twice", function(){
+                expect(error.message).toEqual('ALREADY_FAVORITED');
+            });
+        });
+
+        describe("removeFavoritePlace", function(){
+            var place,
+                person,
+                error;
+            beforeEach(function(done){
+                Person.addPlace(ids.moeId, ids.parisId, function(err, _place){
+                    Person.removePlace(ids.moeId, ids.parisId, function(err, _place){
+                        place = _place;
+                        Person.removePlace(ids.moeId, ids.parisId, function(err) {
+                            error = err;
+                            Person.getOneById(ids.moeId, function(err, _person){
+                                person = _person;
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
+            it("paris is favorited 0 times", function(){
+                expect(place.numberOfTimesFavorited).toEqual(0);
+            });
+            it("moe has 0 fav places", function(){
+                expect(person.numberOfFavoritePlaces).toEqual(0);
+            });
+            it("moe's fav place is not paris", function(){
+                expect(person.favoritePlaces.indexOf(ids.parisId)).toEqual(-1);
+            });
+            it("moe can not remove paris twice", function(){
+                expect(error.message).toEqual('PLACE_NOT_FOUND');
+            });
+        });
+
+        describe("allWhoFavoritedPlace", function(){
+            var people;
+            beforeEach(function(done){
+                Person.addPlace(ids.moeId, ids.parisId, function(err, _place){
+                    Person.addPlace(ids.larryId, ids.parisId, function(err, _place){
+                        Person.findAllWhoFavoritedPlace(ids.parisId, function(err, _people){
+                            people = _people.map(function(person){
+                                return person.name;
+                            });
+                            done();
+                        });
+                    });
+                });
+            });
+            it("people are moe and larry", function(){
+                expect(people).toEqual(['Moe', 'Larry']);
+            });
+        });
+
     });
 
     /** test Place class **/
@@ -117,8 +205,8 @@ describe("models", function() {
                     done();
                 });
             });
-            it("places are nyc, paris, london", function(){
-                expect(places).toEqual(['New York', 'Paris', 'London']);
+            it("places are london, nyc, paris", function(){
+                expect(places).toEqual(['London', 'New York', 'Paris']);
             });
         });
         describe("increase number of times favorited", function(){
