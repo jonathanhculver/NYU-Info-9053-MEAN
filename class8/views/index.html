@@ -20,8 +20,18 @@
 			app.controller("HomeCtrl", function($scope){
 				$scope.message = "Hello from home";
 			});
-			app.controller("PeopleCtrl", function($scope){
+			app.factory("PeopleSvc", function($http){
+				return {
+					getPeople: function(){
+						return $http.get("/api/people");
+					}
+				};
+			});
+			app.controller("PeopleCtrl", function($scope, PeopleSvc){
 				$scope.message = "Hello from people";
+				PeopleSvc.getPeople().then(function(result){
+					$scope.people = result.data;
+				});
 			});
 
 		</script>

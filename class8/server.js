@@ -11,4 +11,19 @@ app.get("/", function(req, res){
 	res.render('index.html'); 
 }); 
 
+app.get("/api/people", function(req, res){
+	
+	var people = [{
+		name: "Moe"
+	},
+	{	
+		name: "Larry"
+	},
+	{
+		name: "Currly"
+	}];
+
+	res.send(people);
+});
+
 app.listen(process.env.port || 3000);
