@@ -10,11 +10,11 @@
 				$routeProvider
 					.when("/people", {
 						controller: "PeopleCtrl",
-						template: "{{message}}"
+						templateUrl: "/templates/people.html"
 					})
 					.otherwise({
 						controller: "HomeCtrl",
-						template: "{{message}}"
+						templateUrl: "/templates/home.html"
 					});
 			});
 			app.controller("HomeCtrl", function($scope){
