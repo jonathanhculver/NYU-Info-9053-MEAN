@@ -9,17 +9,19 @@
 			app.config(function($routeProvider){
 				$routeProvider
 					.when("/people", {
-						controller: "PeopleCtrl"
+						controller: "PeopleCtrl",
+						template: "{{message}}"
 					})
 					.otherwise({
-						controller: "HomeCtrl"
-					})
+						controller: "HomeCtrl",
+						template: "{{message}}"
+					});
 			});
-			app.controller("MyCtrl", function($scope){
-				$scope.foo = "bar";
-				$scope.changeFoo = function(){
-					$scope.foo= Math.random() + ' blah';
-				};
+			app.controller("HomeCtrl", function($scope){
+				$scope.message = "Hello from home";
+			});
+			app.controller("PeopleCtrl", function($scope){
+				$scope.message = "Hello from people";
 			});
 
 		</script>
@@ -34,12 +36,7 @@
 			</li>
 		</ul>
 		<div class="container">
-
-			<div class="well" ng-controller="MyCtrl">
-				<h2 ng-click="changeFoo()">In Well</h2>
-				{{ foo }}
-			</div>
-
+			<div ng-view></div>
 		</div>
 	</body>
 </html> 
