@@ -1,0 +1,52 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.2/angular.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.2/angular-route.min.js"></script>
+		<script type="text/javascript">
+
+			var app = angular.module("app", ['ngRoute']);
+			app.config(function($routeProvider){
+				$routeProvider
+					.when("/people", {
+						controller: "PeopleCtrl",
+						templateUrl: "/templates/people.html"
+					})
+					.otherwise({
+						controller: "HomeCtrl",
+						templateUrl: "/templates/home.html"
+					});
+			});
+			app.controller("HomeCtrl", function($scope){
+				$scope.message = "Hello from home";
+			});
+			app.factory("PeopleSvc", function($http){
+				return {
+					getPeople: function(){
+						return $http.get("/api/people");
+					}
+				};
+			});
+			app.controller("PeopleCtrl", function($scope, PeopleSvc){
+				$scope.message = "Hello from people";
+				PeopleSvc.getPeople().then(function(result){
+					$scope.people = result.data;
+				});
+			});
+
+		</script>
+	</head>
+	<body ng-app="app">
+		<ul class="nav nav-tabs">
+			<li>
+				<a href="/">Home</a>
+			</li>
+			<li>
+				<a href="#/people">People</a>
+			</li>
+		</ul>
+		<div class="container">
+			<div ng-view></div>
+		</div>
+	</body>
+</html> 
