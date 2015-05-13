@@ -12,6 +12,10 @@ angular.module("myWorld").config(function($routeProvider, $locationProvider){
       controller: "PersonCtrl",
       templateUrl: "/templates/person.html"
     })
+    .when("/things/:id", {
+      controller: "ThingCtrl",
+      templateUrl: "/templates/thing.html"
+    })
     .when("/things", {
       controller: "ThingsCtrl",
       templateUrl: "/templates/things.html"

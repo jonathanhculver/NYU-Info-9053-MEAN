@@ -32,7 +32,7 @@ angular.module("myWorld").controller("PeopleCtrl", function($scope, $location, N
   };
   function activate(){
     $scope.inserting = {
-      active: false
+      active: true
     };
     PeopleSvc.getPeople().then(function(people){
       $scope.people = people;
