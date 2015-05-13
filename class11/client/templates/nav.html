@@ -1,0 +1,14 @@
+<div class="navbar navbar-default">
+	<div class="container_fluid">
+	<ul class="nav navbar-nav">
+		  <li ng-repeat="tab in tabs" ng-class="{active: tab.active}">
+		      <a href="{{tab.path}}">
+		        {{ tab.title }}
+		      </a>
+		  </li>
+		</ul>
+		<div class="navbar-right navbar-form">
+			<a href="/login" class="btn btn-default">login</a>
+		</div>
+	</div>
+</div>
