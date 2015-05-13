@@ -1,3 +1,1 @@
-- install jade and express
-- set up server
-- install bower modules
+http://jculver-mean-final-project.herokuapp.com/ 
