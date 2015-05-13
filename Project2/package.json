@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "JWT_SECRET=bar CONN='mongodb://localhost/project2' nodemon server.js"
+    "start": "JWT_SECRET=bar CONN='mongodb://jculver:meanc1assfinal@ds031832.mongolab.com:31832/heroku_app36802966' nodemon server.js"
   },
   "author": "",
   "license": "ISC",
